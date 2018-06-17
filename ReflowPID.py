@@ -4,7 +4,7 @@ import enum
 from numpy import interp
 
 
-class ReflowProfile:
+class LeadFreeProfile:
     ramp = {'up_max': 1,    # max temp gradient degC/sec
             'down_max': 3,
             'up_duration': 10,
@@ -22,8 +22,26 @@ class ReflowProfile:
               'dwell': 30}
 
 
+class LeadProfile:
+    ramp = {'up_max': 1,    # max temp gradient degC/sec
+            'down_max': 3,
+            'up_duration': 10,
+            'duty': 100,
+            'prevision_time': 10}
+
+    preheat = {'duty': 75,
+               'end_temp': 60}
+
+    soak = {'temp_min': 130,
+            'temp_max': 145,
+            'duration': 120}
+
+    reflow = {'peak': 210,
+              'dwell': 30}
+
+
 class ReflowController:
-    def __init__(self):
+    def __init__(self, profile):
         self.pid = PID(25, 0, 80)
         self.pid.sample_time = 1
         self.output = 0
@@ -35,7 +53,7 @@ class ReflowController:
         self.state_begin = self.current_time
         self.state_elapsed = 0
 
-        self.profile = ReflowProfile()
+        self.profile = profile
 
     def get_elapsed_time(self):
         return self.current_time - self.start_time
