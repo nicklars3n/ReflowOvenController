@@ -1,3 +1,5 @@
+import matplotlib
+matplotlib.use('Qt5Agg')
 import matplotlib.pyplot as plt
 
 
@@ -37,4 +39,3 @@ class TempGraph:
         plt.axhline(set_y, linewidth=0.5, color='k', linestyle='--')
 
         plt.pause(0.0001)
-

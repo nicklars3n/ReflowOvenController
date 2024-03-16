@@ -18,7 +18,7 @@ unsigned long elapsed = 0;
 
 int duty = 0;
 
-String buff = "";
+uint8_t state = 0;
 
 void setup() {
   // put your setup code here, to run once:
@@ -32,19 +32,9 @@ void loop() {
   if(Serial.available() > 0)
   {
     char a = Serial.read();
-    if(a == '\n')
+    if(a == 'p')
     {
-      int temp = buff.toInt();
       
-      if(temp >= 0 && temp <= 100)
-      {
-        duty = temp;
-      }
-      buff = "";
-    }
-    else
-    {
-      buff.concat(a);
     }
   }
   now = millis();
