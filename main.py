@@ -14,13 +14,13 @@ SETPOINT = 50
 
 
 def main():
-    # profile = ReflowPID.LeadFreeProfile()
-    profile = ReflowPID.LeadProfile()
+    profile = ReflowPID.LeadFreeProfile()
+    # profile = ReflowPID.LeadProfile()
     controller = ReflowPID.ReflowController(profile)
 
-    pid = PID(25, 0, 80)
-    pid.sample_time = 1
-    pid.SetPoint = 90.0
+    # pid = PID(25, 0, 80)
+    # pid.sample_time = 1
+    # pid.SetPoint = 90.0
 
     graph = TempGraph(profile)
 
@@ -34,19 +34,19 @@ def main():
             except ValueError:
                 continue
 
-            pid.update(temp)
-            duty = int(round(pid.output))
+            # pid.update(temp)
+            # duty = int(round(pid.output))
 
             controller.update(temp)
-            # duty = int(round(controller.output))
+            duty = int(round(controller.output))
 
             ser.write(str(duty).encode())
             ser.write(b'\n')
 
-            # if controller.current_state != controller.st_preheat_until:
-                # graph.update(controller.get_elapsed_time(), temp, controller.pid.SetPoint)
+            if controller.current_state != controller.st_preheat_until:
+                graph.update(controller.get_elapsed_time(), temp, controller.pid.SetPoint)
 
-            print("Temp: {:.2f}, Duty: {}, Setpoint: {:.2f}".format(temp, duty, pid.SetPoint))
+            print("Temp: {:.2f}, Duty: {}, Setpoint: {:.2f}".format(temp, duty, controller.pid.SetPoint))
 
             # time.sleep(LOOP_DELAY)
 
